@@ -29,7 +29,7 @@ class DesenvolvedorController
         $sexo           = $data['sexo'];
         $idade          = $data['idade'];
         $hobby          = $data['hobby'];
-        $datanascimento = $data['datanascimento'];
+        $datanascimento = new \DateTime($data['datanascimento']);
 
         if (empty($nome) || empty($sexo) || empty($idade) || empty($hobby) || empty($datanascimento)) {
             throw new NotFoundHttpException('Expecting mandatory parameters!');
@@ -46,6 +46,10 @@ class DesenvolvedorController
     public function get($id): JsonResponse
     {
         $developer = $this->desenvolvedorRepository->findOneBy(['id' => $id]);
+
+        if(empty($developer)){
+            return new JsonResponse(['status' => 'Developer not found!'], Response::HTTP_NOT_FOUND);
+        }
 
         $data = [
             'id' => $developer->getId(),
@@ -93,7 +97,7 @@ class DesenvolvedorController
         empty($data['sexo'])            ? true : $developer->setSexo($data['sexo']);
         empty($data['idade'])           ? true : $developer->setIdade($data['idade']);
         empty($data['hobby'])           ? true : $developer->setHobby($data['hobby']);
-        empty($data['datanascimento'])  ? true : $developer->setDatanascimento($data['datanascimento']);
+        empty($data['datanascimento'])  ? true : $developer->setDatanascimento(new \DateTime($data['datanascimento']));
 
         $updatedDeveloper = $this->desenvolvedorRepository->updateDeveloper($developer);
 
@@ -106,6 +110,10 @@ class DesenvolvedorController
     public function delete($id): JsonResponse
     {
         $developer = $this->desenvolvedorRepository->findOneBy(['id' => $id]);
+
+        if(empty($developer)){
+            return new JsonResponse(['status' => 'Failed to delete developer with invalid id!'], Response::HTTP_BAD_REQUEST);
+        }
 
         $this->desenvolvedorRepository->removeDeveloper($developer);
 

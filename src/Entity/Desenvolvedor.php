@@ -112,7 +112,7 @@ class Desenvolvedor
             'id'            => $this->getId(),
             'nome'          => $this->getNome(),
             'sexo'          => $this->getSexo(),
-            'getIdade'      => $this->getIdade(),
+            'Idade'         => $this->getIdade(),
             'hobby'         => $this->getHobby(),
             'datanascimento'=> $this->getDatanascimento()
         ];
